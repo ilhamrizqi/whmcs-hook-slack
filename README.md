@@ -5,21 +5,24 @@ WHMCS hook to Slack. Send notification to slack channel or user on ticket open a
 
 ## Installation
 
-Just copy ''slack.php'' and ''slack.json'' to ''$WHMCS/includes/hooks'' directory.
+Just copy `slack.php` and `slack.json` to `$WHMCS_ROOT/includes/hooks` directory.
 
 ## Configuration
 
-Edit file ''slack.json''
+Edit file `slack.json` and change `hook_url` to your slack hook url.
 
-  ''{
+```json
+  {
     "hook_url"  : "your_slack_hook_url",
     "emoji"     : ":loudspeaker",
     "channel"   : "#whmcs"
-  }''
+  }
+```
 
-''hook_url'': your slack's hook URL
-''emoji'': emoji icon
-''channel'': Slack channel to receive the notification
+
+`hook_url`: your slack's hook URL
+`emoji`: emoji icon
+`channel`: Slack channel to receive the notification
 
 ## Done
 
