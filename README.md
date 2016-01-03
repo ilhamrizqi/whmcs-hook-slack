@@ -13,7 +13,8 @@ Edit file `slack.json` and change `hook_url` to your slack hook url.
 
 ```json
   {
-    "hook_url"  : "your_slack_hook_url",
+    "hook_url"  : "your_slack_hook_url",    
+    "username"  : "WHMCS",                  
     "emoji"     : ":loudspeaker",
     "channel"   : "#whmcs"
   }
@@ -21,6 +22,7 @@ Edit file `slack.json` and change `hook_url` to your slack hook url.
 Explanation
 
 * `hook_url`: your slack's hook URL
+* `username`: whatever you want to display in slack channel
 * `emoji`: emoji icon
 * `channel`: Slack channel to receive the notification
 
