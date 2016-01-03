@@ -53,7 +53,7 @@ function get_client_name($clientid)
 function slack_post($text)
 {
     $text = file_get_contents("slack.json");
-    $config = json_decode($text);
+    $config = json_decode($text, true);
     $url = $config['url'];    
     $payload = array
     (
