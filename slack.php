@@ -52,9 +52,9 @@ function get_client_name($clientid)
 
 function slack_post($text)
 {
-    $text = file_get_contents("slack.json");
-    $config = json_decode($text, true);
-    $url = $config['url'];    
+    $json = file_get_contents(dirname(__FILE__) ."/slack.json");
+    $config = json_decode($json, true);
+    $url = $config['hook_url'];    
     $payload = array
     (
         "text"          => $text,
@@ -64,6 +64,7 @@ function slack_post($text)
     );
 
     $data = "payload=".json_encode($payload);
+    logActivity("Send slack notification to ".$url."\r\n".$data);
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
