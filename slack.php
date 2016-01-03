@@ -64,7 +64,7 @@ function slack_post($text)
     );
 
     $data = "payload=".json_encode($payload);
-    logActivity("Send slack notification to ".$url."\r\n".$data);
+    logActivity("Send slack notification:".$text);
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
