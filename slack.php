@@ -54,22 +54,27 @@ function slack_post($text)
 {
     $json = file_get_contents(dirname(__FILE__) ."/slack.json");
     $config = json_decode($json, true);
-    $url = $config['hook_url'];    
+    $url = $config['hook_url'];
+    $text = htmlspecialchars_decode($text, ENT_QUOTES | ENT_NOQUOTES);
     $payload = array
     (
-        "text"          => $text,
+        "text"          => htmlspecialchars($text),
         "username"      => $config["username"],
         "icon_emoji"    => $config["emoji"],
         "channel"       => $config["channel"]
     );
 
-    $data = "payload=".json_encode($payload);
+    $data = json_encode($payload);
     logActivity("Send slack notification:".$text);
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+      'Content-Type: application/json',
+      'Content-Length: ' . strlen($data))
+    );
     $result = curl_exec($ch);
 
 }
@@ -88,7 +93,7 @@ function hook_slack_ticketopen($vars)
 
     $text  = "[ID: ".$ticketid."] ".$subject."\r\n";
     $text .= "User: ".$name."\r\n";
-    $text .= "Departemen: ".$deptname."\r\n";
+    $text .= "Department: ".$deptname."\r\n";
     //$text .= "Priority: ".$priority."\r\n";
     $text .= $message."\r\n";
 
@@ -108,7 +113,7 @@ function hook_slack_ticketuserreply($vars)
 
     $text  = "[ID: ".$ticketid."] ".$subject."\r\n";
     $text .= "User: ".$name."\r\n";
-    $text .= "Departemen: ".$deptname."\r\n";
+    $text .= "Department: ".$deptname."\r\n";
     //$text .= "Priority: ".$priority."\r\n";
     $text .= $message."\r\n";
 
