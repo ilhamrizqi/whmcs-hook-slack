@@ -17,9 +17,12 @@ if (!defined("WHMCS"))
 
 function get_client_name($clientid)
 {
+    $json = file_get_contents(dirname(__FILE__) ."/slack.json");
+    $config = json_decode($json, true);
+    $adminuser = $config['adminuser'];
+
     $client = "";
     $command = "getclientsdetails";
-    $adminuser = "ilham";
     $values["clientid"] = $clientid;
     $values["pid"] = $pid;
 
@@ -76,7 +79,6 @@ function slack_post($text)
       'Content-Length: ' . strlen($data))
     );
     $result = curl_exec($ch);
-
 }
 
 function hook_slack_ticketopen($vars)
@@ -93,7 +95,7 @@ function hook_slack_ticketopen($vars)
 
     $text  = "[ID: ".$ticketid."] ".$subject."\r\n";
     $text .= "User: ".$name."\r\n";
-    $text .= "Department: ".$deptname."\r\n";
+    $text .= "Department: ".$deptname."\r\n\r\n";
     //$text .= "Priority: ".$priority."\r\n";
     $text .= $message."\r\n";
 
@@ -113,14 +115,32 @@ function hook_slack_ticketuserreply($vars)
 
     $text  = "[ID: ".$ticketid."] ".$subject."\r\n";
     $text .= "User: ".$name."\r\n";
-    $text .= "Department: ".$deptname."\r\n";
+    $text .= "Department: ".$deptname."\r\n\r\n";
     //$text .= "Priority: ".$priority."\r\n";
     $text .= $message."\r\n";
 
     slack_post($text);
+}
 
+function hook_slack_ticketadminreply($vars)
+{
+    $ticketid = $vars['ticketid'];
+    $admin = $vars['admin'];
+    $deptid = $vars['deptid'];
+    $deptname = $vars['deptname'];
+    $subject = $vars['subject'];
+    $message = $vars['message'];
+    $priority = $vars['priority'];
+
+    $text  = "Admin Reply\r\n[ID: ".$ticketid."] ".$subject."\r\n";
+    $text .= "Admin: ".$admin."\r\n";
+    $text .= "Department: ".$deptname."\r\n\r\n";
+    //$text .= "Priority: ".$priority."\r\n";
+    $text .= $message."\r\n";
+
+    slack_post($text);
 }
 
 add_hook("TicketOpen",      1, "hook_slack_ticketopen");
 add_hook("TicketUserReply", 1, "hook_slack_ticketuserreply");
-
+add_hook("TicketAdminReply", 1, "hook_slack_ticketadminreply");

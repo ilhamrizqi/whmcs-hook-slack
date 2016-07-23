@@ -2,5 +2,6 @@
     "hook_url"  : "your_slack_hook_url",
     "username"  : "WHMCS",
     "emoji"     : ":loudspeaker:",
-    "channel"   : "#whmcs"
+    "channel"   : "#whmcs",
+    "adminuser" : "your_whmcs_admin_username"
 }
